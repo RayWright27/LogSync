@@ -1,5 +1,9 @@
-#ifndef LCWDD_H
-#define LCWDD_H
+#ifndef LCWDD_HPP
+#define LCWDD_HPP
+
+#include <cstring>
+
+namespace lcwdd{
 
 #define N 4 // NUMBER OF PROCESSES
 
@@ -10,4 +14,7 @@ void VisitEvent(ProcessID j, EventIndex y);
 
 void DependencyTrack(ProcessID i, EventIndex x);
 
-#endif //LCWDD_H
+void ClearOutputArr(void);
+
+}
+#endif //LCWDD_HPP

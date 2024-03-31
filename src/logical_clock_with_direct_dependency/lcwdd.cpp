@@ -1,10 +1,9 @@
 #include "lcwdd.hpp"
-
 /*
 * Векторная отметка времени для события Ei с индексом x 
 * процесса Pi
 */
-EventIndex DTV[N] = {0};
+lcwdd::EventIndex DTV[N] = {0};
 
 /*
 * Direct dependency vector - в каждом элементе Di[k] 
@@ -18,10 +17,10 @@ EventIndex DTV[N] = {0};
 // В ВЫЗОВЕ VISIT EVENT С СООТВЕТСТВУЮЩИМИ ProcessID И EventIndex
 int D[N][N] = {{1, 0, 0, 0},
                {1, 4, 3, 1},
-               {0, 0, 3, 2},
-               {0, 0, 0, 2}};
+               {0, 0, 3, 7},
+               {0, 0, 0, 7}};
 
-void VisitEvent(ProcessID j, EventIndex y){
+void lcwdd::VisitEvent(ProcessID j, EventIndex y){
   /*
   каждый раз, когда VisitEvent находит в D 
   знач-е > порядк. №, хранящегося в DTV -> в эл-т 
@@ -40,7 +39,7 @@ void VisitEvent(ProcessID j, EventIndex y){
   }
 }
 
-void DependencyTrack(ProcessID i, EventIndex x){
+void lcwdd::DependencyTrack(ProcessID i, EventIndex x){
   /*инициализация i-го элемента, соответствующего событию
   с порядковым номером x*/
   for(int k = 0; k < N; k++){
@@ -52,4 +51,8 @@ void DependencyTrack(ProcessID i, EventIndex x){
   }
 
   VisitEvent(i, x);
+}
+
+void lcwdd::ClearOutputArr(void){
+  memset(&DTV[0], 0, sizeof(DTV));
 }

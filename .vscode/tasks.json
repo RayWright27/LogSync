@@ -9,7 +9,8 @@
                 "-I${workspaceFolder}\\src",
                 "-g",
                 "${workspaceFolder}\\src\\main.cpp",
-                "C:\\ITMO\\PhD\\Thesis\\LogSync\\src\\logical_clock_with_direct_dependency\\lcwdd.cpp",
+                "${workspaceFolder}\\src\\logical_clock_with_direct_dependency\\lcwdd.cpp",
+                "${workspaceFolder}\\src\\controlled_logical_clock\\clc.cpp",
                 "-o",
                 "${workspaceFolder}\\main.exe"
             ],
