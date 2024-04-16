@@ -1,7 +1,0 @@
-make.exe --dry-run --always-make --keep-going --print-directory
-make.exe: Entering directory `e:/University_n_Studying/repos/C++20_template_project'
- 
-make.exe: *** No targets specified and no makefile found.  Stop.
-
-make.exe: Leaving directory `e:/University_n_Studying/repos/C++20_template_project'
- 

@@ -55,7 +55,11 @@
         "random": "cpp",
         "string": "cpp",
         "fstream": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "bit": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp",
+        "numbers": "cpp"
     },
     "cmake.configureOnOpen": true
 }
