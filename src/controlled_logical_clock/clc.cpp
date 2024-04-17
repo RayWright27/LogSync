@@ -3,7 +3,7 @@
 using namespace clc;
 
 Process::Process(process_id id,
-                 vector<Event> eventVect): 
+                 vector<std::shared_ptr<clc::Event>> eventVect): 
     id(id),
     //adjTable(eventsNum, vector<timestamp_t>(eventsNum)),
     eventVect(eventVect){
@@ -40,17 +40,7 @@ CLCSynchronizer::CLCSynchronizer(
         
 };
 
-bool CLCSynchronizer::isCLCComputed(void){
-    for(uint32_t proccess_id = 0; proccess_id < this->processVec.size(); proccess_id++){
-        if(this->processVec.at(proccess_id).getCLCComputed() == false){
-            return false;
-        }else{
-            return true;
-        }
-    }
-};
-
-Event CLCSynchronizer::searchForSendEvent(Event &currRcvEvent){
+shared_ptr<Event> CLCSynchronizer::searchForSendEvent(shared_ptr<Event> currRcvEvent){
     for(uint32_t idx = 0; idx < interProcessVector.size(); idx++){
         if(currRcvEvent == interProcessVector.at(idx).recieveEvent){
             return interProcessVector.at(idx).sendEvent;
@@ -58,76 +48,76 @@ Event CLCSynchronizer::searchForSendEvent(Event &currRcvEvent){
     }
 }
 
-void CLCSynchronizer::clcComputeForwardAmortization(Event &currEvent){
+void CLCSynchronizer::clcComputeForwardAmortization(shared_ptr<Event> currEvent){
     /*equation 4(a)*/
-    if(currEvent.getEventType() == recieve){
-        if(currEvent.getEventNumber() != 0){
-            currEvent.setTimestampCLC(
+    if(currEvent->getEventType() == recieve){
+        if(currEvent->getEventNumber() != 0){
+            currEvent->setTimestampCLC(
                 max(
                     max(
-                    searchForSendEvent(currEvent).getTimestampCLC() + 
+                    searchForSendEvent(currEvent)->getTimestampCLC() + 
                     minMsgDelay
-                        .at(searchForSendEvent(currEvent).getEventLocation())
-                        .at(currEvent.getEventLocation()),
+                        .at(searchForSendEvent(currEvent)->getEventLocation())
+                        .at(currEvent->getEventLocation()),
 
-                    getEventByIDs(currEvent.getEventNumber() - 1, 
-                        currEvent.getEventLocation()).getTimestampCLC() + 
-                        getProcessByID(currEvent.getEventLocation()).getDelta_i()               
+                    getEventByIDs(currEvent->getEventNumber() - 1, 
+                        currEvent->getEventLocation())->getTimestampCLC() + 
+                        getProcessByID(currEvent->getEventLocation()).getDelta_i()               
                     
                     ), 
 
                     max(
-                        getEventByIDs(currEvent.getEventNumber() - 1, 
-                        currEvent.getEventLocation()).getTimestampCLC() + 
-                    currEvent.getGamma()*(
-                        currEvent.getTimestamp() - 
-                        (getEventByIDs(currEvent.getEventNumber() - 1, 
-                        currEvent.getEventLocation()).getTimestamp())),
+                        getEventByIDs(currEvent->getEventNumber() - 1, 
+                        currEvent->getEventLocation())->getTimestampCLC() + 
+                    currEvent->getGamma()*(
+                        currEvent->getTimestamp() - 
+                        (getEventByIDs(currEvent->getEventNumber() - 1, 
+                        currEvent->getEventLocation())->getTimestamp())),
 
-                    currEvent.getTimestamp()
+                    currEvent->getTimestamp()
                     )
                 )
             );
         }
         // есди это первое событие, то некоторые элементы отбрасываются
         else{
-            currEvent.setTimestampCLC(
+            currEvent->setTimestampCLC(
                 max(
-                    searchForSendEvent(currEvent).getTimestampCLC() + 
+                    searchForSendEvent(currEvent)->getTimestampCLC() + 
                     minMsgDelay
-                        .at(searchForSendEvent(currEvent).getEventLocation())
-                        .at(currEvent.getEventLocation()),
-                    currEvent.getTimestamp()
+                        .at(searchForSendEvent(currEvent)->getEventLocation())
+                        .at(currEvent->getEventLocation()),
+                    currEvent->getTimestamp()
                 )
             );
         }
 
     }
     /*equation 4(b)*/
-    else if(currEvent.getEventType() == send or 
-    currEvent.getEventType() == internal){
-        if(currEvent.getEventNumber() != 0){
-            currEvent.setTimestampCLC(
+    else if(currEvent->getEventType() == send or 
+    currEvent->getEventType() == internal){
+        if(currEvent->getEventNumber() != 0){
+            currEvent->setTimestampCLC(
                 max(
                     max(
-                        getEventByIDs(currEvent.getEventNumber() - 1, 
-                            currEvent.getEventLocation()).getTimestampCLC() + 
-                            getProcessByID(currEvent.getEventLocation()).getDelta_i(),
+                        getEventByIDs(currEvent->getEventNumber() - 1, 
+                            currEvent->getEventLocation())->getTimestampCLC() + 
+                            getProcessByID(currEvent->getEventLocation()).getDelta_i(),
 
                         
-                        getEventByIDs(currEvent.getEventNumber() - 1, 
-                            currEvent.getEventLocation()).getTimestampCLC() + 
-                        currEvent.getGamma()*(
-                            currEvent.getTimestamp() - 
-                            (getEventByIDs(currEvent.getEventNumber() - 1, 
-                            currEvent.getEventLocation()).getTimestamp()))
+                        getEventByIDs(currEvent->getEventNumber() - 1, 
+                            currEvent->getEventLocation())->getTimestampCLC() + 
+                        currEvent->getGamma()*(
+                            currEvent->getTimestamp() - 
+                            (getEventByIDs(currEvent->getEventNumber() - 1, 
+                            currEvent->getEventLocation())->getTimestamp()))
                     ),
 
-                    currEvent.getTimestamp()
+                    currEvent->getTimestamp()
                 )
             );
         }else{
-            currEvent.setTimestampCLC(currEvent.getTimestamp());
+            currEvent->setTimestampCLC(currEvent->getTimestamp());
         }         
     }else{
         cout << "ERROR: invalid event type of current event!\n";
@@ -135,23 +125,21 @@ void CLCSynchronizer::clcComputeForwardAmortization(Event &currEvent){
 };
 
 void CLCSynchronizer::syncTimestamps(void){
-    bool isFirstLoopDone = false;
-    do{
+    for(uint32_t pass_num = 0; pass_num < 2; pass_num++){
         for(uint32_t proccess_id = 0; proccess_id < this->processVec.size(); proccess_id++){
             for(int32_t ev_id = this->processVec.at(proccess_id).getLastEventEstimated(); 
                 ev_id < this->processVec.at(proccess_id).eventVect.size(); ev_id++){
                 /*если это recieve скипаем сохраняя id последнего обработанного эл-та в процессе 
                 т.к. мб неизвестена CLC отметка времени соответствующего ему send*/
-                if((this->processVec.at(proccess_id).eventVect.at(ev_id).getEventType() == recieve) &&
-                    !isFirstLoopDone){
+                if((this->processVec.at(proccess_id).eventVect.at(ev_id)->getEventType() == recieve) &&
+                    (pass_num == 0)){
                     this->processVec.at(proccess_id).setLastEventEstimated(ev_id);
                     if(proccess_id < this->processVec.size() - 1){
                         proccess_id++;
                         ev_id = -1;
                     }
-                    /*если это последний процесс в векторе - выходим*/
+                    /*если это последний процесс в векторе - переходим на повторный проход*/
                     else{
-                        isFirstLoopDone = true;
                         break;
                     }
                 }else{
@@ -160,5 +148,5 @@ void CLCSynchronizer::syncTimestamps(void){
                 }
             }
         }
-    }while(!isCLCComputed());
+    }
 };

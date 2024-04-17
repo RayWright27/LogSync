@@ -77,14 +77,14 @@ public:
 };
 
 typedef struct EventCooperation {
-    Event& sendEvent;
-    Event& recieveEvent;
+    shared_ptr<Event> sendEvent;
+    shared_ptr<Event> recieveEvent;
 
-    EventCooperation(Event& send, Event& recieve):
+    EventCooperation(shared_ptr<Event> send, shared_ptr<Event> recieve):
         sendEvent(send), recieveEvent(recieve){
-            assert(send.getEventType() == event_t::send && 
+            assert(send->getEventType() == event_t::send && 
                     "First event should be of type send!");
-            assert(recieve.getEventType() == event_t::recieve && 
+            assert(recieve->getEventType() == event_t::recieve && 
                     "Second event should be of type recieve!");
     }
 
@@ -97,7 +97,7 @@ private:
     /*Minimal difference between two events on process i*/
     timestamp_t delta_i;
     /*Вектор со всеми событиями процесса*/
-    vector<Event> eventVect;
+    vector<shared_ptr<clc::Event>> eventVect;
     /*последнее событие, для которого был подсчитана CLC отметка
     (см. syncTimestamps)*/
     uint32_t lastEventEstimated = 0;
@@ -105,7 +105,7 @@ private:
     bool clcComputed = false;
 
 public:
-    Process(process_id id, vector<Event> eventVect);
+    Process(process_id id, vector<std::shared_ptr<clc::Event>> eventVect);
     
     friend class CLCSynchronizer;
 
@@ -133,10 +133,10 @@ private:
     vector<EventCooperation_t> interProcessVector;
 
     /*Ищет событие отправки в таблице переходов между процессами устройствами*/
-    Event searchForSendEvent(Event &currRcvEvent);
+    shared_ptr<Event> searchForSendEvent(shared_ptr<Event> currRcvEvent);
 
     /*Ищет событие по его id*/
-    Event getEventByIDs(
+    shared_ptr<Event> getEventByIDs(
         event_number eventNumber,
         event_location_t eventLocation){
             return this->processVec.at(eventLocation).eventVect.at(eventNumber);
@@ -144,14 +144,12 @@ private:
     /*Ищет процесс по его id*/
     Process getProcessByID(process_id processID);
 
-    /*Есть ли хоть 1 процесс с невычисленными CLC метками*/
-    bool isCLCComputed(void);
 
 public:
     CLCSynchronizer(
                     vector<EventCooperation_t> interProcessVector,
                     vector<Process> processVec);
-    void clcComputeForwardAmortization(Event &currEvent);
+    void clcComputeForwardAmortization(shared_ptr<Event> currEvent);
     //TODO?:
     //page 5, para 3.1
     void evaluateGammas(void);
