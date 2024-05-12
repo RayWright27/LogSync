@@ -1,0 +1,376 @@
+make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --question
+# GNU Make 3.81
+# Copyright (C) 2006  Free Software Foundation, Inc.
+# This is free software; see the source for copying conditions.
+# There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A
+# PARTICULAR PURPOSE.
+
+# This program built for i386-pc-mingw32
+ 
+
+# Make data base, printed on Thu Jul 07 17:09:22 2022
+
+# Variables
+
+# automatic
+<D = $(patsubst %/,%,$(dir $<))
+# automatic
+?F = $(notdir $?)
+# makefile
+MAKEFLAGS = Rrqp
+# environment
+VSCODE_LOG_NATIVE = false
+# automatic
+?D = $(patsubst %/,%,$(dir $?))
+# environment
+PLATFORMIO_IDE = 2.5.0
+# automatic
+@D = $(patsubst %/,%,$(dir $@))
+# environment
+HOMEDRIVE = C:
+# automatic
+@F = $(notdir $@)
+# automatic
+^D = $(patsubst %/,%,$(dir $^))
+# makefile
+CURDIR := e:/University_n_Studying/repos/C++20_template_projec 
+t
+# default
+SHELL := sh.exe
+# environment
+WINDIR = C:\Windows
+# environment
+VSCODE_NLS_CONFIG = {"locale":"en-us","availableLanguages":{},"_languagePackSupport":true}
+# environment
+VBOX_MSI_INSTALL_PATH = E:\VM\
+# environment
+ONEDRIVE = E:\OneDrive - Peter the Great St. Petersburg Polytechnical University
+# environment
+QSYS_ROOTDIR = C:\intelFPGA_lite\21.1\quartus\sopc_builder\bin
+# environment
+PATHEXT = .COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JS;.JSE;.WSF;.WSH;.MSC
+# makefile
+MAKEFILE_LIST := 
+# environment
+FPS_BROWSER_USER_PROFILE_STRING = Default
+# environment
+TMP = C:\Users\ray\AppData\Local\Temp
+# environment
+VSCODE_VERBOSE_LOGGING = true
+# environment
+PROGRAMW6432 = C:\Program Files
+# environment
+PROGRAMDATA = C:\ProgramData
+# environment
+VSCODE_IPC_HOOK_EXTHOST = \\.\pipe\vscode-ipc-e6dc01ec-2815-48f3-aace-6eea7faf6a7a-sock
+# environment
+VSCODE_CWD = E:\University_n_Studying\repos\C++20_template_project
+# environment
+GIT CMD = E:\Program Files\Git\cmd
+# environment
+LM_LICENSE_FILE = C:\flexlm\LICENSE.TXT
+# environment
+COMMONPROGRAMW6432 = C:\Program Files\Common Files
+# environment
+PROCESSOR_ARCHITECTURE = x86
+# environment
+NVCUDASAMPLES8_0_ROOT = C:\ProgramData\NVIDIA Corporation\CUDA Samples\v8.0
+# environment
+USERPROFILE = C:\Users\ray
+# environment
+ALLUSERSPROFILE = C:\ProgramData
+# environment
+SOPC_KIT_NIOS2 = G:\Quartus\nios2eds
+# environment
+VSCODE_LOG_STACK = false
+# environment
+NUMBER_OF_PROCESSORS = 12
+# environment
+ELECTRON_RUN_AS_NODE = 1
+# default
+.FEATURES := target-specific order-only second-expans 
+ion else-if archives
+# environment
+NVTOOLSEXT_PATH = C:\Program Files\NVIDIA Corporation\NvToolsExt\
+# automatic
+%F = $(notdir $%)
+# environment
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_18116_KJBPESKLKKCBYZHO
+# environment
+CUDA_PATH_V8_0 = C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0
+# environment
+VSCODE_PIPE_LOGGING = true
+# environment
+GNUWIN32 = C:\Program Files (x86)\GnuWin32\bin
+# environment
+COMPUTERNAME = DESKTOP-LMP8HP8
+# environment
+PROGRAMFILES = C:\Program Files (x86)
+# environment
+DRIVERDATA = C:\Windows\System32\Drivers\DriverData
+# environment
+NVCUDASAMPLES_ROOT = C:\ProgramData\NVIDIA Corporation\CUDA Samples\v8.0
+# environment
+ORIGINAL_XDG_CURRENT_DESKTOP = undefined
+# environment
+MINGW64 = E:\Program Files (x86)\Git\mingw64\bin
+# environment
+USERNAME = ray
+# environment
+IVERILOG = C:\iverilog\bin
+# environment
+PUBLIC = C:\Users\Public
+# environment
+VSCODE_AMD_ENTRYPOINT = vs/workbench/api/node/extensionHostProcess
+# environment
+VSCODE_CODE_CACHE_PATH = C:\Users\ray\AppData\Roaming\Code\CachedData\30d9c6cd9483b2cc586687151bcbcd635f373630
+# environment
+APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = true
+# environment
+COMMONPROGRAMFILES = C:\Program Files (x86)\Common Files
+# environment
+LOGONSERVER = \\DESKTOP-LMP8HP8
+# environment
+VSCODE_HANDLES_UNCAUGHT_ERRORS = true
+# environment
+USERDOMAIN = DESKTOP-LMP8HP8
+# environment
+PLATFORMIO_PATH = C:\Users\ray\.platformio\penv\Scripts;C:\Users\ray\.platformio\penv;C:\Users\ray\.platformio\python3;C:\mingw64\bin;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\libnvvp;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;E:\Program Files (x86)\bin;C:\PROGRA~1\MATLAB\R2020b\bin;C:\Program Files\Process Lasso\;E:\Matlab\runtime\win64;E:\Matlab\bin;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;E:\Program Files\Git\cmd;E:\Program Files\Git\mingw64\bin;E:\Program Files\Git\usr\bin;C:\Program Files (x86)\GnuWin32\bin;C:\iverilog\bin;C:\iverilog\gtkwave\bin;E:\Program Files (x86)\Git\cmd;E:\Xilinx\Vivado\2018.2\bin;C:\Program Files\Pandoc\;C:\Users\ray\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\ray\AppData\Local\Programs\Python\Python310\;C:\Users\ray\AppData\Local\Microsoft\WindowsApps;C:\Users\ray\AppData\Local\Programs\Hyper\resources\bin;C:\Users\ray\AppData\Local\Programs\Microsoft VS Code\bin;C:\modeltech64_2020.4\win64;C:\intelFPGA_lite\21.1\questa_fse\win64;E:\ModelSim\modelsim_ase\win32aloem;C:\iverilog\bin;C:\iverilog\gtkwave\bin;;C:\mingw64\bin;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\libnvvp;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;E:\Program Files (x86)\bin;C:\PROGRA~1\MATLAB\R2020b\bin;C:\Program Files\Process Lasso\;E:\Matlab\runtime\win64;E:\Matlab\bin;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;E:\Program Files\Git\cmd;E:\Program Files\Git\mingw64\bin;E:\Program Files\Git\usr\bin;C:\Program Files (x86)\GnuWin32\bin;C:\iverilog\bin;C:\iverilog\gtkwave\bin;E:\Program Files (x86)\Git\cmd;E:\Xilinx\Vivado\2018.2\bin;C:\Program Files\Pandoc\;C:\Users\ray\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\ray\AppData\Local\Programs\Python\Python310\;C:\Users\ray\AppData\Local\Microsoft\WindowsApps;C:\Users\ray\AppData\Local\Programs\Hyper\resources\bin;C:\Users\ray\AppData\Local\Programs\Microsoft VS Code\bin;C:\modeltech64_2020.4\win64;C:\intelFPGA_lite\21.1\questa_fse\win64;E:\ModelSim\modelsim_ase\win32aloem;C:\iverilog\bin;C:\iverilog\gtkwav 
+e\bin;
+# default
+MAKE = $(MAKE_COMMAND)
+# default
+MAKECMDGOALS := all
+# environment
+PATH = C:\mingw64\bin;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin;C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\libnvvp;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;E:\Program Files (x86)\bin;C:\PROGRA~1\MATLAB\R2020b\bin;C:\Program Files\Process Lasso\;E:\Matlab\runtime\win64;E:\Matlab\bin;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;E:\Program Files\Git\cmd;E:\Program Files\Git\mingw64\bin;E:\Program Files\Git\usr\bin;C:\Program Files (x86)\GnuWin32\bin;C:\iverilog\bin;C:\iverilog\gtkwave\bin;E:\Program Files (x86)\Git\cmd;E:\Xilinx\Vivado\2018.2\bin;C:\Program Files\Pandoc\;C:\Users\ray\AppData\Local\Programs\Python\Python310\Scripts\;C:\Users\ray\AppData\Local\Programs\Python\Python310\;C:\Users\ray\AppData\Local\Microsoft\WindowsApps;C:\Users\ray\AppData\Local\Programs\Hyper\resources\bin;C:\Users\ray\AppData\Local\Programs\Microsoft VS Code\bin;C:\modeltech64_2020.4\win64;C:\intelFPGA_lite\21.1\questa_fse\win64;E:\ModelSim\modelsim_ase\win32aloem;C:\iverilog\bin;C:\iverilog\gtkwave\bin;
+# environment
+GTKW = C:\iverilog\gtkwave\bin;
+# environment
+ONEDRIVECOMMERCIAL = E:\OneDrive - Peter the Great St. Petersburg Polytechnical University
+# default
+MAKE_VERSION := 3.81
+# makefile
+.DEFAULT_GOAL := 
+# environment
+PROGRAMFILES(X86) = C:\Program Files (x86)
+# automatic
+%D = $(patsubst %/,%,$(dir $%))
+# environment
+LOCALAPPDATA = C:\Users\ray\AppData\Local
+# environment
+PSMODULEPATH = C:\Program Files\WindowsPowerShell\Modules;C:\Windows\system32\WindowsPowerShell\v1.0\Modules;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\AppvPkgConverter;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\AppvSequencer;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\
+# default
+MAKE_COMMAND := make.exe
+# environment
+PROCESSOR_ARCHITEW6432 = AMD64
+# default
+.VARIABLES := 
+# automatic
+*F = $(notdir $*)
+# e 
+nvironment
+PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 167 Stepping 1, GenuineIntel
+# environment
+OS = Windows_NT
+# environment
+VSCODE_IPC_HOOK = \\.\pipe\a2786fe40de45aedae4fb319af6de36d-1.68.1-main-sock
+# environment
+HOMEPATH = \Users\ray
+# environment
+COMMONPROGRAMFILES(X86) = C:\Program Files (x86)\Common Files
+# environment
+PROMPT = $P$G
+# environment
+MFLAGS = -Rrqp
+# automatic
+*D = $(patsubst %/,%,$(dir $*))
+# environment
+SYSTEMROOT = C:\Windows
+# automatic
++D = $(patsubst %/,%,$(dir $+))
+# automatic
++F = $(notdir $+)
+# environment
+APPDATA = C:\Users\ray\AppData\Roaming
+# environment
+TEMP = C:\Users\ray\AppData\Local\Temp
+# environment
+COMSPEC = C:\Windows\system32\cmd.exe
+# default
+MAKEFILES := 
+# environment
+QUARTUS_ROOTDIR = G:\Quartus\quartus
+# automatic
+<F = $(notdir $<)
+# environment
+PLATFORMIO_CALLER = vscode
+# environment
+OPENSSL_IA32CAP = ~0x20000000
+# environment
+LC_ALL = C
+# environment
+ ADS_LICENSE_FILE = C:\Program Files\Keysight\license.lic
+# environment
+NO_PROXY = 127.0.0.1
+# automatic
+ 
+^F = $(notdir $^)
+# environment
+CUDA_PATH = C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0
+# default
+SUFFIXES := 
+# environment
+SYSTEMDRIVE = C:
+# environment
+SESSIONNAME = Console
+# environment
+PROCESSOR_REVISION = a701
+# environment
+VS140COMNTOOLS = C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\
+# environment
+MOZ_PLUGIN_PATH = C:\Program Files (x86)\Foxit Reader\plugins\
+# environment
+MAKELEVEL := 0
+# environment
+LANG = C
+# environment
+PROCESSOR_LEVEL = 6
+# environment
+FPS_BRO 
+WSER_APP_PROFILE_STRING = Internet Explorer
+# environment
+VSCODE_PID = 18116
+# environment
+NO_XILINX_DATA_LICENSE = HIDDEN
+# environment
+GIT USR BIN = E:\Program Files\Git\usr\bin
+# environment
+USERDOMAIN_ROAMINGPROFILE = DESKTOP-LMP8HP8
+# variable set hash-table stats:
+# Load=114/1024=11%, Rehash=0, Collisions=13/131=10%
+
+# Pattern-specific Variable Values
+
+# No pattern-specific variable values.
+
+# Directories
+
+# C:\Program Files\Docker\Docker\resources\bin (key C:/Program Files/Docker/Docker/resources/bin 
+, mtime 1642005706): 13 files, no impossibilities.
+# C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\libnvvp (key C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/libnvvp, mtime 1615064701): 14 files, no impossibilities.
+# C:\Program Files\Pandoc\ (key C:/Program Files/Pandoc/, mtime 1653735073): 7 files, no impossibilities.
+# E:\Matlab\bin (key E:/Matlab/bin, mtime 1637180500): 16 files, no impossibilities.
+# C:\Windows\System32\WindowsPowerShell\v1.0\ (key C:/Windows/System32/WindowsPowerShell/v1.0/, mtime 1636644523): 32 files, no impossibilities.
+# C:\Program Files\Process Lasso\ (key C:/Program Files/Process Lasso/, mtime 1624467420): 38 files, no impossibilities.
+# C:\Windows\System32\Wbem (key C:/Windows/System32/Wbem, mtime 1636644521): 172 files, no impossibilities.
+# . (key e:/University_n_Studying/repos/C++20_template_project, mtime 1657202808): 4 files, no impossibilities.
+# C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common (key C:/Program Files (x86)/NVIDIA Corporation/PhysX/C 
+ommon, mtime 1656106787): 12 files, no impossibilities.
+# E:\Program Files\Git\mingw64\bin: could not be stat'd.
+# C:\Users\ray\AppData\Local\Programs\Python\Python310\ (key C:/Users/ray/AppData/Local/Programs/Python/Python310/, mtime 1647551204): 19 files, no impossibilities.
+# E:\Program Files (x86)\Git\cmd (key E:/Program Files (x86)/Git/cmd, mtime 1646222545): 8 files, no impossibilities.
+# C:\Users\ray\AppData\Local\Programs\Python\Python310\Scripts\ (key C:/Users/ray/AppData/Local/Programs/Python/Pyth 
+on310/Scripts/, mtime 1647551425): 34 files, no impossibilities.
+# C:\PROGRA~1\MATLAB\R2020b\bin: could not be stat'd.
+# C:\Users\ray\AppData\Local\Programs\Microsoft VS Code\bin (key C:/Users/ray/AppData/Local/Programs/Microsoft VS Code/bin, mtime 1656088259): 4 files, no impossibilities.
+# C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v8.0\bin (key C:/Program Files/NVIDIA GPU Computing Toolkit/CUDA/v8.0/bin, mtime 1615064745): 45 files, no impossibilities.
+# C:\Program Files (x86)\VMware\VMware Workstation\bin\ (key C:/Program Files (x86)/VMware/VMware Workstation/bin/, mtime 1615296322): 4 files, no impossibilities.
+# C:\Windows\System32\OpenSSH\: could not be stat'd.
+# C:\Program Files (x86)\Common Files\Oracle\Java\javapath (key C:/Program Files (x86)/Common Files/Oracle/Java/javapath, mtime 1625825877): 5 files, no impossibilities.
+# C:\mingw64\bin (key C:/mingw64/bin, mtime 1654524206): 393 files, no impossibilities.
+# C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Seq 
+uencer\ (key C:/Program Files (x86)/Windows Kits/10/Microsoft Application Virtualization/Sequencer/, mtime 1640542749): 70 files, no impossibilities.
+# E:\Program Files (x86)\bin (key E:/Program Files (x86)/bin, mtime 1634919087): 16 files, no impossibilities.
+# E:\Matlab\runtime\win64 (key E:/Matlab/runtime/win64, mtime 1637180500): 9 files, no impossibilities.
+# C:\Windows (key C:/Windows, mtime 1637496545): 126 files, no impossibilities.
+# C:\ProgramData\Oracle\Java\javapath (key C:/ProgramData/Oracle/Ja 
+va/javapath, mtime 1611175141): 5 files, no impossibilities.
+# E:\Program Files\Git\usr\bin: could not be stat'd.
+# C:\Users\ray\AppData\Local\Programs\Hyper\resources\bin: could not be stat'd.
+# E:\ModelSim\modelsim_ase\win32aloem (key E:/ModelSim/modelsim_ase/win32aloem, mtime 1645117221): 110 files, no impossibilities.
+# C:\Users\ray\AppData\Local\Microsoft\WindowsApps (key C:/Users/ray/AppData/Local/Microsoft/WindowsApps, mtime 1656754053): 5 files, no impossibilities.
+# C:\Program Files (x86)\Windows K 
+its\10\Windows Performance Toolkit\ (key C:/Program Files (x86)/Windows Kits/10/Windows Performance Toolkit/, mtime 1640542744): 403 files, no impossibilities.
+# C:\ProgramData\DockerDesktop\version-bin: could not be stat'd.
+# C:\modeltech64_2020.4\win64: could not be stat'd.
+# C:\iverilog\gtkwave\bin (key C:/iverilog/gtkwave/bin, mtime 1650113015): 325 files, no impossibilities.
+# E:\Xilinx\Vivado\2018.2\bin (key E:/Xilinx/Vivado/2018.2/bin, mtime 1649787937): 65 files, no impossibilities.
+# E:\Program Fil 
+es\Git\cmd: could not be stat'd.
+# C:\Windows\system32 (key C:/Windows/system32, mtime 1624562283): 3178 files, no impossibilities.
+# C:\intelFPGA_lite\21.1\questa_fse\win64: could not be stat'd.
+# C:\iverilog\bin (key C:/iverilog/bin, mtime 1650113013): 13 files, no impossibilities.
+# C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR (key C:/Program Files/NVIDIA Corporation/NVIDIA NvDLISR, mtime 1601825255): 5 files, no impossibilities.
+# C:\Program Files (x86)\GnuWin32\bin (key C:/Program Files (x86)/Gnu 
+Win32/bin, mtime 1643545006): 5 files, no impossibilities.
+
+# 5155 files, no impossibilities in 40 directories.
+
+# Implicit Rules
+
+# No implicit rules.
+
+# Files
+
+# Not a target:
+all:
+#  Command-line target.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has not been updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+.DEFAULT:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated. 
+
+
+# Not a target:
+makefile:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit rule search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# Not a target:
+.SUFFIXES:
+#  Implicit rule search has not been done.
+#  Modification time never checked.
+#  File has not been updated.
+
+# Not a target:
+GNUmakefile:
+#  A default, MAKEFILES, or -include/sinclude makefile.
+#  Implicit ru 
+le search has been done.
+#  File does not exist.
+#  File has been updated.
+#  Failed to be updated.
+# variable set hash-table stats:
+# Load=0/32=0%, Rehash=0, Collisions=0/0=0%
+
+# files hash-table stats:
+# Load=5/1024=0%, Rehash=0, Collisions=0/16=0%
+# VPATH Search Paths
+
+# No `vpath' search paths.
+
+# No general (`VPATH' variable) search path.
+
+# # of strings in strcache: 0
+# # of strcache buffers: 0
+# strcache size: total = 0 / max = 0 / min = 4096 / avg = 0
+# strcache free: total = 0 / max = 0 / min = 409 
+make.exe: *** No rule to make target `all'.  Stop.
+
+6 / avg = 0
+
+# Finished Make data base on Thu Jul 07 17:09:22 2022
+
+ 

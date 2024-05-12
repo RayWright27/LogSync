@@ -11,6 +11,7 @@
                 "${workspaceFolder}\\src\\main.cpp",
                 "${workspaceFolder}\\src\\logical_clock_with_direct_dependency\\lcwdd.cpp",
                 "${workspaceFolder}\\src\\controlled_logical_clock\\clc.cpp",
+                "${workspaceFolder}\\src\\math\\misc.cpp",
                 "-o",
                 "${workspaceFolder}\\main.exe"
             ],

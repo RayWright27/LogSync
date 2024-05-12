@@ -24,14 +24,15 @@ void testLCWDD(void){
 void testCLC(void){
   /*объявляем ивенты*/  
   std::shared_ptr<clc::Event> e_0_0(new clc::Event(clc::internal, 0, 0, 0));
-  std::shared_ptr<clc::Event> e_0_1(new clc::Event(clc::send, 1.5, 0, 1));
+  std::shared_ptr<clc::Event> e_0_1(new clc::Event(clc::send, /*1.5*/ 2.11, 0, 1));
   std::shared_ptr<clc::Event> e_0_2(new clc::Event(clc::internal, 2.12, 0, 2));
   std::shared_ptr<clc::Event> e_0_3(new clc::Event(clc::recieve, 3.57, 0, 3));
   std::shared_ptr<clc::Event> e_0_4(new clc::Event(clc::internal, 4.11587, 0, 4));
   std::shared_ptr<clc::Event> e_1_0(new clc::Event(clc::internal, 0, 1, 0));
-  std::shared_ptr<clc::Event> e_1_1(new clc::Event(clc::recieve, 1.65, 1, 1));
-  std::shared_ptr<clc::Event> e_1_2(new clc::Event(clc::send, 2.42, 1, 2));
-  std::shared_ptr<clc::Event> e_1_3(new clc::Event(clc::internal, 3.995, 1, 3));
+  std::shared_ptr<clc::Event> e_1_05(new clc::Event(clc::internal, 1, 1, 1));
+  std::shared_ptr<clc::Event> e_1_1(new clc::Event(clc::recieve, 1.65, 1, /*1*/2));
+  std::shared_ptr<clc::Event> e_1_2(new clc::Event(clc::send, 2.42, 1, /*2*/3));
+  std::shared_ptr<clc::Event> e_1_3(new clc::Event(clc::internal, 3.995, 1, /*3*/ 4));
   std::shared_ptr<clc::Event> e_2_0(new clc::Event(clc::send, 0, 2, 0));
   std::shared_ptr<clc::Event> e_2_1(new clc::Event(clc::internal, 0.4857, 2, 1));
   std::shared_ptr<clc::Event> e_2_2(new clc::Event(clc::recieve, 3.68, 2, 2));
@@ -41,7 +42,7 @@ void testCLC(void){
   processVec.push_back(clc::Process(0, 
     std::vector<std::shared_ptr<clc::Event>>{e_0_0, e_0_1, e_0_2, e_0_3, e_0_4}));
   processVec.push_back(clc::Process(1, 
-    std::vector<std::shared_ptr<clc::Event>>{e_1_0, e_1_1, e_1_2, e_1_3}));
+    std::vector<std::shared_ptr<clc::Event>>{e_1_0, e_1_05, e_1_1, e_1_2, e_1_3}));
   processVec.push_back(clc::Process(2, 
     std::vector<std::shared_ptr<clc::Event>>{e_2_0, e_2_1, e_2_2, e_2_3}));
 
