@@ -3,7 +3,7 @@
 * Векторная отметка времени для события Ei с индексом x 
 * процесса Pi
 */
-lcwdd::EventIndex DTV[N] = {0};
+lcwdd::EventIndex DTV[NUM_OF_PROCESSES] = {0};
 
 /*
 * Direct dependency vector - в каждом элементе Di[k] 
@@ -15,7 +15,7 @@ lcwdd::EventIndex DTV[N] = {0};
 */
 // У НАС УЧАСТВУЕТ НЕСКОЛЬКО ВЕКТОРОВ D ДЛЯ КАЖДОГО ПРОЦЕССА
 // В ВЫЗОВЕ VISIT EVENT С СООТВЕТСТВУЮЩИМИ ProcessID И EventIndex
-int D[N][N] = {{1, 0, 0, 0},
+int D[NUM_OF_PROCESSES][NUM_OF_PROCESSES] = {{1, 0, 0, 0},
                {1, 4, 3, 1},
                {0, 0, 3, 7},
                {0, 0, 0, 7}};
@@ -26,7 +26,7 @@ void lcwdd::VisitEvent(ProcessID j, EventIndex y){
   знач-е > порядк. №, хранящегося в DTV -> в эл-т 
   пишется новое знач-е 
   */
-  for(int k = 0; k < N; k++){
+  for(int k = 0; k < NUM_OF_PROCESSES; k++){
     if(k != j - 1){
       if(D[j - 1][k] > DTV[k]){
         DTV[k] = D[j - 1][k];
@@ -42,7 +42,7 @@ void lcwdd::VisitEvent(ProcessID j, EventIndex y){
 void lcwdd::DependencyTrack(ProcessID i, EventIndex x){
   /*инициализация i-го элемента, соответствующего событию
   с порядковым номером x*/
-  for(int k = 0; k < N; k++){
+  for(int k = 0; k < NUM_OF_PROCESSES; k++){
     if(k != i){
       DTV[k - 1] = 0;
     }else{

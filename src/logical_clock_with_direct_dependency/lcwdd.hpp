@@ -5,7 +5,7 @@
 
 namespace lcwdd{
 
-#define N 4 // NUMBER OF PROCESSES
+#define NUM_OF_PROCESSES 4 // NUMBER OF PROCESSES
 
 typedef int ProcessID ;
 typedef int EventIndex;

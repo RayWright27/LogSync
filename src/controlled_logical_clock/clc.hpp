@@ -6,8 +6,10 @@
 #include <iostream>
 #include <cassert>
 #include <memory>
+#include <limits>
+#include <cmath>
 
-#include "../math/ndim_vectors.hpp"
+#include "../math/misc.hpp"
 
 /*
     Задачи:
@@ -20,8 +22,12 @@ namespace clc{
 
 using namespace std;
 
+#define TIMESTAMP_DOUBLE
+
 enum event_t {internal, send, recieve};
+#ifdef TIMESTAMP_DOUBLE
 typedef double timestamp_t;
+#endif
 typedef uint32_t process_id;
 typedef uint32_t event_number;
 typedef process_id event_location_t;
@@ -115,6 +121,10 @@ public:
 
     void setLastEventEstimated(uint32_t val){this->lastEventEstimated = val;};
     bool getCLCComputed(void){return this->clcComputed;};
+
+    /*вовзращает true, если до currEvent нет события отправки, 
+    нарушающего логику сообшений*/
+    bool checkAmortizationInterval(shared_ptr<Event> currEvent);
 };
 
 
@@ -132,8 +142,11 @@ private:
     /*Вектор переходов между устройствами*/
     vector<EventCooperation_t> interProcessVector;
 
-    /*Ищет событие отправки в таблице переходов между процессами устройствами*/
+    /*Ищет событие отправки в таблице переходов между процессами/устройствами*/
     shared_ptr<Event> searchForSendEvent(shared_ptr<Event> currRcvEvent);
+
+    /*Ищет событие приёма в таблице переходов между процессами/устройствами*/
+    shared_ptr<Event> searchForRcvEvent(shared_ptr<Event> currSendEvent);
 
     /*Ищет событие по его id*/
     shared_ptr<Event> getEventByIDs(
@@ -150,6 +163,7 @@ public:
                     vector<EventCooperation_t> interProcessVector,
                     vector<Process> processVec);
     void clcComputeForwardAmortization(shared_ptr<Event> currEvent);
+    void clcComputeBackwardAmortization(shared_ptr<Event> currEvent, uint32_t process_id);
     //TODO?:
     //page 5, para 3.1
     void evaluateGammas(void);

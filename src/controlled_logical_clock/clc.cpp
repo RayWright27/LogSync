@@ -46,7 +46,15 @@ shared_ptr<Event> CLCSynchronizer::searchForSendEvent(shared_ptr<Event> currRcvE
             return interProcessVector.at(idx).sendEvent;
         }
     }
-}
+};
+
+shared_ptr<Event> CLCSynchronizer::searchForRcvEvent(shared_ptr<Event> currSendEvent){
+    for(uint32_t idx = 0; idx < interProcessVector.size(); idx++){
+        if(currSendEvent == interProcessVector.at(idx).sendEvent){
+            return interProcessVector.at(idx).recieveEvent;
+        }
+    }
+};
 
 void CLCSynchronizer::clcComputeForwardAmortization(shared_ptr<Event> currEvent){
     /*equation 4(a)*/
@@ -124,6 +132,64 @@ void CLCSynchronizer::clcComputeForwardAmortization(shared_ptr<Event> currEvent)
     }
 };
 
+bool Process::checkAmortizationInterval(shared_ptr<Event> currEvent){
+    
+    for(uint32_t idx = currEvent->getEventNumber(); idx > 0; idx--){
+        if((this->eventVect.at(idx)->eventType == internal) 
+            // проверяем соответствие timestamp_t стандартному типу и сравниваем
+            // относительно соответсвующего эпсилон
+            #ifdef TIMESTAMP_DOUBLE
+            || (
+            abs(static_cast<double>(this->eventVect.at(idx)->getTimestamp() - 
+                this->eventVect.at(idx)->getTimestampCLC()))
+            <= numeric_limits<double>::epsilon())
+            #else
+            assert(1 && "Timestamp datatype undefined!")
+            #endif
+            ){
+                continue;
+        }else{
+            return false;
+        }
+    }
+    return true;
+};
+
+void CLCSynchronizer::clcComputeBackwardAmortization(shared_ptr<Event> currEvent, 
+    uint32_t process_id){
+    auto currProcess = this->processVec.at(process_id);    
+    if(currProcess.checkAmortizationInterval(currEvent)){
+        /*..используем линейную интерполяцию, начиная с события, предшествующего
+        currEvent'у*/
+        for(uint32_t idx = currEvent->getEventNumber() - 1; idx > 0; idx--){
+            // TODO: ошибка в аргументах
+            double CLCval = lintrp(currProcess.eventVect.at(idx)->getTimestamp(), 
+                currProcess.eventVect.at(0)->getTimestamp(),
+                currEvent->getTimestamp(), 
+                currProcess.eventVect.at(0)->getTimestampCLC(),
+                currEvent->getTimestampCLC());
+            auto a = searchForRcvEvent(currProcess.eventVect.at(idx))->getTimestampCLC();
+            auto b = minMsgDelay.at(currProcess.getProcessID()).
+                at(currProcess.eventVect.at(idx)->getEventLocation());
+            double LCminusMu = searchForRcvEvent(currProcess.eventVect.at(idx))->getTimestampCLC() - 
+                minMsgDelay.at(currProcess.getProcessID()).
+                at(currProcess.eventVect.at(idx)->getEventLocation());    
+            if(currProcess.eventVect.at(idx)->getEventType() == send){
+                if(CLCval > LCminusMu){
+                    /*.. если хоть один сюда попал - выходит кусочно-линейная интерполяция*/
+                    currProcess.eventVect.at(idx)->setTimestampCLC(LCminusMu);                    
+                }else{
+                    currProcess.eventVect.at(idx)->setTimestampCLC(CLCval);                    
+                }
+            }else{
+                currProcess.eventVect.at(idx)->setTimestampCLC(CLCval); 
+            }
+            return;
+        }
+    }
+    /*..или не используем ничего..?*/    
+};
+
 void CLCSynchronizer::syncTimestamps(void){
     for(uint32_t pass_num = 0; pass_num < 2; pass_num++){
         for(uint32_t proccess_id = 0; proccess_id < this->processVec.size(); proccess_id++){
@@ -143,8 +209,11 @@ void CLCSynchronizer::syncTimestamps(void){
                         break;
                     }
                 }else{
-                    clcComputeForwardAmortization(
-                        this->processVec.at(proccess_id).eventVect.at(ev_id));
+                    clcComputeForwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id));
+                    if(this->processVec.at(proccess_id).eventVect.at(ev_id)->getEventType() == recieve){
+                        clcComputeBackwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id),
+                            proccess_id);
+                    }
                 }
             }
         }
