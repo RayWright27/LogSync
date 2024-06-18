@@ -214,6 +214,11 @@ void CLCSynchronizer::syncTimestamps(void){
                         clcComputeBackwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id),
                             proccess_id);
                     }
+                    clcComputeForwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id));
+                    if(this->processVec.at(proccess_id).eventVect.at(ev_id)->getEventType() == recieve){
+                        clcComputeBackwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id),
+                            proccess_id);
+                    }
                 }
             }
         }

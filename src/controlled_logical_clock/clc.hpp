@@ -101,7 +101,7 @@ private:
     uint32_t eventsNum;
     process_id id;
     /*Minimal difference between two events on process i*/
-    timestamp_t delta_i;
+    timestamp_t delta_i = 1e-1f;
     /*Вектор со всеми событиями процесса*/
     vector<shared_ptr<clc::Event>> eventVect;
     /*последнее событие, для которого был подсчитана CLC отметка
