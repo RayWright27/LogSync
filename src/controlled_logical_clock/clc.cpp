@@ -10,48 +10,73 @@ Process::Process(process_id id,
         this->eventsNum = eventVect.size();
 };
 
-Process CLCSynchronizer::getProcessByID(process_id processID){
-    for(uint32_t idx = 0; idx < processVec.size(); idx++){
-        if(processVec.at(idx).getProcessID() == processID){
-            return processVec.at(idx);
+Process::Process(const Process& process){
+    this->eventsNum = process.eventsNum;
+    this->id = process.id;
+    this->delta_i = process.delta_i;
+    /*copy(process.eventVect.begin(), process.eventVect.end(),
+        this->eventVect.begin());*/
+    for(uint32_t i = 0; i < process.eventVect.size(); i++){
+        this->eventVect.push_back(process.eventVect.at(i));
+    }
+    this->lastEventEstimated = process.lastEventEstimated;
+    this->clcComputed = process.clcComputed;
+}
+
+shared_ptr<Process> CLCSynchronizer::getProcessByID(process_id processID){
+    for(uint32_t idx = 0; idx < processVector.size(); idx++){
+        if(processVector.at(idx)->getProcessID() == processID){
+            return processVector.at(idx);
         }
     }
     assert(1 && "Error! No process with such ID!\n");
 };
 
 CLCSynchronizer::CLCSynchronizer(
-                    vector<EventCooperation_t> interProcessVector,
-                    vector<Process> processVec):
-    processVec(processVec),
-    processNum(processVec.size()),
-    interProcessVector(interProcessVector),
-    minMsgDelay(processNum, vector<timestamp_t>(processNum)){
+                    /*vector<EventCooperation_t> interProcessVector,
+                    vector<Process> processVec*/)
+    //processVec(processVec),
+    //processNum(processVec.size()),
+    //interProcessVector(interProcessVector),
+{
         /*инициализация minMsgDelay*/
-        // пока что дефолтными значениями
-        for(vector<vector<timestamp_t>>::iterator row 
-            = minMsgDelay.begin();
-            row != minMsgDelay.end(); 
-            row++){
-                for(vector<timestamp_t>::iterator col = row->begin(); 
-                    col != row->end(); col++){
-                    *col = 0.01;
-                }
+    this->processNum = processVector.size() + 1;
+    //processNum, vector<timestamp_t>(processNum));
+    this->minMsgDelay.resize(processNum);
+    for(uint32_t i = 0; i < this->minMsgDelay.size(); i++){
+        this->minMsgDelay.at(i) = vector<timestamp_t>(processNum);
+    }
+    // пока что дефолтными значениями
+    for(vector<vector<timestamp_t>>::iterator row 
+        = minMsgDelay.begin();
+        row != minMsgDelay.end(); 
+        row++){
+            for(vector<timestamp_t>::iterator col = row->begin(); 
+                col != row->end(); col++){
+                *col = 0.01;
             }
+        }
         
 };
 
 shared_ptr<Event> CLCSynchronizer::searchForSendEvent(shared_ptr<Event> currRcvEvent){
-    for(uint32_t idx = 0; idx < interProcessVector.size(); idx++){
-        if(currRcvEvent == interProcessVector.at(idx).recieveEvent){
-            return interProcessVector.at(idx).sendEvent;
+    for(uint32_t idx = 0; idx < eventsCoopMap.size(); idx++){
+        if(currRcvEvent == eventsCoopMap.at(idx).recieveEvent){
+        std::cout<<"____\n";
+        std::cout<<"getEventType()\n currRcvEvent = " << currRcvEvent;
+        std::cout<<"____\n";
+            return eventsCoopMap.at(idx).sendEvent;
         }
     }
+        std::cout<<"____\n";
+        std::cout<<"getEventType()\n currRcvEvent = " << currRcvEvent;
+        std::cout<<"____\n";
 };
 
 shared_ptr<Event> CLCSynchronizer::searchForRcvEvent(shared_ptr<Event> currSendEvent){
-    for(uint32_t idx = 0; idx < interProcessVector.size(); idx++){
-        if(currSendEvent == interProcessVector.at(idx).sendEvent){
-            return interProcessVector.at(idx).recieveEvent;
+    for(uint32_t idx = 0; idx < eventsCoopMap.size(); idx++){
+        if(currSendEvent == eventsCoopMap.at(idx).sendEvent){
+            return eventsCoopMap.at(idx).recieveEvent;
         }
     }
 };
@@ -70,7 +95,7 @@ void CLCSynchronizer::clcComputeForwardAmortization(shared_ptr<Event> currEvent)
 
                     getEventByIDs(currEvent->getEventNumber() - 1, 
                         currEvent->getEventLocation())->getTimestampCLC() + 
-                        getProcessByID(currEvent->getEventLocation()).getDelta_i()               
+                        getProcessByID(currEvent->getEventLocation())->getDelta_i()               
                     
                     ), 
 
@@ -110,7 +135,8 @@ void CLCSynchronizer::clcComputeForwardAmortization(shared_ptr<Event> currEvent)
                     max(
                         getEventByIDs(currEvent->getEventNumber() - 1, 
                             currEvent->getEventLocation())->getTimestampCLC() + 
-                            getProcessByID(currEvent->getEventLocation()).getDelta_i(),
+                            getProcessByID(currEvent->getEventLocation())
+                                ->getDelta_i(),
 
                         
                         getEventByIDs(currEvent->getEventNumber() - 1, 
@@ -157,32 +183,31 @@ bool Process::checkAmortizationInterval(shared_ptr<Event> currEvent){
 
 void CLCSynchronizer::clcComputeBackwardAmortization(shared_ptr<Event> currEvent, 
     uint32_t process_id){
-    auto currProcess = this->processVec.at(process_id);    
-    if(currProcess.checkAmortizationInterval(currEvent)){
+    auto currProcess = processVector.at(process_id);    
+    if(currProcess->checkAmortizationInterval(currEvent)){
         /*..используем линейную интерполяцию, начиная с события, предшествующего
         currEvent'у*/
         for(uint32_t idx = currEvent->getEventNumber() - 1; idx > 0; idx--){
-            // TODO: ошибка в аргументах
-            double CLCval = lintrp(currProcess.eventVect.at(idx)->getTimestamp(), 
-                currProcess.eventVect.at(0)->getTimestamp(),
+            double CLCval = lintrp(currProcess->eventVect.at(idx)->getTimestamp(), 
+                currProcess->eventVect.at(0)->getTimestamp(),
                 currEvent->getTimestamp(), 
-                currProcess.eventVect.at(0)->getTimestampCLC(),
+                currProcess->eventVect.at(0)->getTimestampCLC(),
                 currEvent->getTimestampCLC());
-            auto a = searchForRcvEvent(currProcess.eventVect.at(idx))->getTimestampCLC();
-            auto b = minMsgDelay.at(currProcess.getProcessID()).
-                at(currProcess.eventVect.at(idx)->getEventLocation());
-            double LCminusMu = searchForRcvEvent(currProcess.eventVect.at(idx))->getTimestampCLC() - 
-                minMsgDelay.at(currProcess.getProcessID()).
-                at(currProcess.eventVect.at(idx)->getEventLocation());    
-            if(currProcess.eventVect.at(idx)->getEventType() == send){
+            auto a = searchForRcvEvent(currProcess->eventVect.at(idx))->getTimestampCLC();
+            auto b = minMsgDelay.at(currProcess->getProcessID()).
+                at(currProcess->eventVect.at(idx)->getEventLocation());
+            double LCminusMu = searchForRcvEvent(currProcess->eventVect.at(idx))->getTimestampCLC() - 
+                minMsgDelay.at(currProcess->getProcessID()).
+                at(currProcess->eventVect.at(idx)->getEventLocation());    
+            if(currProcess->eventVect.at(idx)->getEventType() == send){
                 if(CLCval > LCminusMu){
                     /*.. если хоть один сюда попал - выходит кусочно-линейная интерполяция*/
-                    currProcess.eventVect.at(idx)->setTimestampCLC(LCminusMu);                    
+                    currProcess->eventVect.at(idx)->setTimestampCLC(LCminusMu);                    
                 }else{
-                    currProcess.eventVect.at(idx)->setTimestampCLC(CLCval);                    
+                    currProcess->eventVect.at(idx)->setTimestampCLC(CLCval);                    
                 }
             }else{
-                currProcess.eventVect.at(idx)->setTimestampCLC(CLCval); 
+                currProcess->eventVect.at(idx)->setTimestampCLC(CLCval); 
             }
             return;
         }
@@ -192,15 +217,15 @@ void CLCSynchronizer::clcComputeBackwardAmortization(shared_ptr<Event> currEvent
 
 void CLCSynchronizer::syncTimestamps(void){
     for(uint32_t pass_num = 0; pass_num < 2; pass_num++){
-        for(uint32_t proccess_id = 0; proccess_id < this->processVec.size(); proccess_id++){
-            for(int32_t ev_id = this->processVec.at(proccess_id).getLastEventEstimated(); 
-                ev_id < this->processVec.at(proccess_id).eventVect.size(); ev_id++){
+        for(uint32_t proccess_id = 0; proccess_id < processVector.size(); proccess_id++){
+            for(int32_t ev_id = processVector.at(proccess_id)->getLastEventEstimated(); 
+                ev_id < processVector.at(proccess_id)->eventVect.size(); ev_id++){
                 /*если это recieve скипаем сохраняя id последнего обработанного эл-та в процессе 
                 т.к. мб неизвестена CLC отметка времени соответствующего ему send*/
-                if((this->processVec.at(proccess_id).eventVect.at(ev_id)->getEventType() == recieve) &&
+                if((processVector.at(proccess_id)->eventVect.at(ev_id)->getEventType() == recieve) &&
                     (pass_num == 0)){
-                    this->processVec.at(proccess_id).setLastEventEstimated(ev_id);
-                    if(proccess_id < this->processVec.size() - 1){
+                    processVector.at(proccess_id)->setLastEventEstimated(ev_id);
+                    if(proccess_id < processVector.size() - 1){
                         proccess_id++;
                         ev_id = -1;
                     }
@@ -209,14 +234,14 @@ void CLCSynchronizer::syncTimestamps(void){
                         break;
                     }
                 }else{
-                    clcComputeForwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id));
-                    if(this->processVec.at(proccess_id).eventVect.at(ev_id)->getEventType() == recieve){
-                        clcComputeBackwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id),
+                    clcComputeForwardAmortization(processVector.at(proccess_id)->eventVect.at(ev_id));
+                    if(processVector.at(proccess_id)->eventVect.at(ev_id)->getEventType() == recieve){
+                        clcComputeBackwardAmortization(processVector.at(proccess_id)->eventVect.at(ev_id),
                             proccess_id);
                     }
-                    clcComputeForwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id));
-                    if(this->processVec.at(proccess_id).eventVect.at(ev_id)->getEventType() == recieve){
-                        clcComputeBackwardAmortization(this->processVec.at(proccess_id).eventVect.at(ev_id),
+                    clcComputeForwardAmortization(processVector.at(proccess_id)->eventVect.at(ev_id));
+                    if(processVector.at(proccess_id)->eventVect.at(ev_id)->getEventType() == recieve){
+                        clcComputeBackwardAmortization(processVector.at(proccess_id)->eventVect.at(ev_id),
                             proccess_id);
                     }
                 }
@@ -224,3 +249,82 @@ void CLCSynchronizer::syncTimestamps(void){
         }
     }
 };
+
+void clc::addEvent(event_t evType, timestamp_t timestamp, 
+    process_id evLocation, event_number evNum){
+
+        std::shared_ptr<Event> event = 
+            std::make_shared<Event>(evType, timestamp, evLocation, evNum);
+        //shared_ptr<Event> event(new Event(evType, timestamp, evLocation, evNum));
+        
+        /* если вектор событий процесса ещё не содержит процесс с данным 
+           event_location_t - создаём и сам процесс и само событие внутри него */
+        if((evLocation >= processVector.size() /*&& evLocation>0*/) /*or 
+            evLocation == 0*/){
+            /*std::vector<std::shared_ptr<Event>>eventVect;
+            Process process(static_cast<event_number>(evNum), eventVect);
+            process.getEventVect().resize(evNum);
+
+            process.getEventVect().insert(
+                process.getEventVect().begin() + evNum, event);
+            
+            processVector.resize(evLocation);
+            processVector.insert(processVector.begin() + evLocation, 
+                make_shared<Process>(process));*/
+
+            
+            std::vector<std::shared_ptr<Event>>eventVect;
+
+            shared_ptr<Process> process = std::make_shared<Process>(
+                static_cast<event_number>(evNum), eventVect);
+
+            //shared_ptr<Process> process(new Process(
+            //    static_cast<event_number>(evNum), eventVect));
+
+
+            process->getEventVect().resize(evNum);
+
+            process->getEventVect().insert(
+                process->getEventVect().begin() + evNum, event);
+            
+            processVector.resize(evLocation);
+            processVector.insert(processVector.begin() + evLocation, 
+                process);
+        }
+        else{
+            if(processVector[evLocation] == NULL){
+                std::vector<std::shared_ptr<Event>>eventVect;
+                Process process(static_cast<event_number>(evNum), eventVect);
+                process.getEventVect().resize(evNum);
+
+                process.getEventVect().insert(
+                    process.getEventVect().begin() + evNum, event);
+                
+                processVector.at(evLocation) = make_shared<Process>(process);
+            }
+            /* иначе событие записываем в вектор событий соотв. процесса */
+            else{
+                auto& evVect = processVector.at(evLocation)->getEventVect();
+                if(evNum > evVect.size()){
+                    evVect.resize(evNum);
+                    evVect.insert(evVect.begin() + evNum, event);
+                }else{
+                    evVect.insert(evVect.begin() + evNum, event);
+                }
+            }
+        }
+             
+    
+};
+
+void clc::addEventConnection(process_id sendEvLocation, event_number sendEvNum, 
+    process_id recvEvLocation, event_number recvEvNum){
+        auto sendEv = 
+            processVector.at(sendEvLocation)->getEventVect().at(sendEvNum);
+        auto recvEv = 
+            processVector.at(recvEvLocation)->getEventVect().at(recvEvNum);
+
+        EventCooperation_t evPair{sendEv, recvEv};
+
+        eventsCoopMap.push_back(evPair);
+}

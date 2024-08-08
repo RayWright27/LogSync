@@ -32,6 +32,8 @@ typedef uint32_t process_id;
 typedef uint32_t event_number;
 typedef process_id event_location_t;
 
+static uint32_t getEventLocation_cnt = 0;
+
 class Event{
 private:
     event_t eventType;
@@ -68,8 +70,17 @@ public:
         }
     }
 
-    event_t getEventType(void){return this->eventType;};
-    event_number getEventNumber(void){return this->eventNumber;};
+    event_t getEventType(void){
+        std::cout<<"____\n";
+        std::cout<<"getEventType()\n";
+        std::cout<<"this = " << this << "\n";
+        std::cout<<"____\n";
+        return this->eventType;};
+    event_number getEventNumber(void){
+        std::cout<<"____\n";
+        std::cout<<"getEventType()\n";
+        std::cout<<"this = " << this << "\n";
+        std::cout<<"____\n";return this->eventNumber;};
     timestamp_t getTimestamp(void){return this->timestamp;};
     timestamp_t getTimestampCLC(void){
         assert(this->timestampCLC != -1 && 
@@ -77,9 +88,17 @@ public:
         return this->timestampCLC;
     };
     event_location_t getEventLocation(void){
+        getEventLocation_cnt++;
+        std::cout<<"getEventLocation_cnt = " << getEventLocation_cnt << "\n";
+        std::cout<<"eventLocation = " << eventLocation << "\n";
+        std::cout<<"this = " << this << "\n";
         return this->eventLocation;};
     timestamp_t getGamma(void){return this->gamma_i_j;};
-    void setTimestampCLC(timestamp_t val){this->timestampCLC = val;};
+    void setTimestampCLC(timestamp_t val){
+        std::cout<<"____\n";
+        std::cout<<"setTimestampCLC()\nthis = " << this << "\n";
+        std::cout<<"____\n";
+        this->timestampCLC = val;};
 };
 
 typedef struct EventCooperation {
@@ -103,7 +122,7 @@ private:
     /*Minimal difference between two events on process i*/
     timestamp_t delta_i = 1e-1f;
     /*Вектор со всеми событиями процесса*/
-    vector<shared_ptr<clc::Event>> eventVect;
+    vector<shared_ptr<Event>> eventVect;
     /*последнее событие, для которого был подсчитана CLC отметка
     (см. syncTimestamps)*/
     uint32_t lastEventEstimated = 0;
@@ -111,8 +130,11 @@ private:
     bool clcComputed = false;
 
 public:
-    Process(process_id id, vector<std::shared_ptr<clc::Event>> eventVect);
+    explicit Process(process_id id, vector<std::shared_ptr<clc::Event>> eventVect);
+    Process(const Process& process);
     
+      ~Process(){};
+
     friend class CLCSynchronizer;
 
     timestamp_t getDelta_i(void){return this->delta_i;};
@@ -121,13 +143,18 @@ public:
 
     void setLastEventEstimated(uint32_t val){this->lastEventEstimated = val;};
     bool getCLCComputed(void){return this->clcComputed;};
+    vector<shared_ptr<Event>>& getEventVect(void){return this->eventVect;};
 
     /*вовзращает true, если до currEvent нет события отправки, 
     нарушающего логику сообшений*/
     bool checkAmortizationInterval(shared_ptr<Event> currEvent);
 };
 
+/* Вектор всех зарегистрированных процессов */
+static vector<shared_ptr<Process>> processVector;
 
+/*Вектор переходов между устройствами*/
+static vector<EventCooperation_t> eventsCoopMap;
 
 class CLCSynchronizer{
 private:
@@ -138,9 +165,9 @@ private:
     vector<vector<timestamp_t>> minMsgDelay;
     /*Массив всех процессов*/
     // TODO: необходима инициализация
-    vector<Process> processVec;
+    //vector<Process> processVec;
     /*Вектор переходов между устройствами*/
-    vector<EventCooperation_t> interProcessVector;
+    //vector<EventCooperation_t> interProcessVector;
 
     /*Ищет событие отправки в таблице переходов между процессами/устройствами*/
     shared_ptr<Event> searchForSendEvent(shared_ptr<Event> currRcvEvent);
@@ -152,19 +179,24 @@ private:
     shared_ptr<Event> getEventByIDs(
         event_number eventNumber,
         event_location_t eventLocation){
-            return this->processVec.at(eventLocation).eventVect.at(eventNumber);
+        std::cout<<"____\n";
+        std::cout<<"getEventType()\n";
+        std::cout<<"this = " << this << "\n";
+        std::cout<<"____\n";
+            return processVector.at(eventLocation)->eventVect.at(eventNumber);
         };
     /*Ищет процесс по его id*/
-    Process getProcessByID(process_id processID);
+    shared_ptr<Process> getProcessByID(process_id processID);
 
 
 public:
-    CLCSynchronizer(
+    explicit CLCSynchronizer(/*
                     vector<EventCooperation_t> interProcessVector,
-                    vector<Process> processVec);
+                    vector<Process> processVec*/);
     void clcComputeForwardAmortization(shared_ptr<Event> currEvent);
-    void clcComputeBackwardAmortization(shared_ptr<Event> currEvent, uint32_t process_id);
-    //TODO?:
+    void clcComputeBackwardAmortization(shared_ptr<Event> currEvent, 
+        uint32_t process_id);
+    //TODO?
     //page 5, para 3.1
     void evaluateGammas(void);
 
@@ -172,6 +204,14 @@ public:
     void syncTimestamps(void);
 };
 
+
+void addEvent(event_t evType, timestamp_t timestamp, 
+    process_id evLocation, event_number evNum);
+
+void addEventConnection(process_id sendEvLocation, event_number sendEvNum, 
+    process_id recvEvLocation, event_number recvEvNum);
+
 }
+
 
 #endif //CLC_HPP
