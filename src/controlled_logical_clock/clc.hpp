@@ -8,6 +8,7 @@
 #include <memory>
 #include <limits>
 #include <cmath>
+#include <deque>
 
 #include "../math/misc.hpp"
 
@@ -78,7 +79,7 @@ public:
         return this->eventType;};
     event_number getEventNumber(void){
         std::cout<<"____\n";
-        std::cout<<"getEventType()\n";
+        std::cout<<"getEventNumber()\n";
         std::cout<<"this = " << this << "\n";
         std::cout<<"____\n";return this->eventNumber;};
     timestamp_t getTimestamp(void){return this->timestamp;};
@@ -90,7 +91,7 @@ public:
     event_location_t getEventLocation(void){
         getEventLocation_cnt++;
         std::cout<<"getEventLocation_cnt = " << getEventLocation_cnt << "\n";
-        std::cout<<"eventLocation = " << eventLocation << "\n";
+        std::cout<<"geteventLocation() = " << eventLocation << "\n";
         std::cout<<"this = " << this << "\n";
         return this->eventLocation;};
     timestamp_t getGamma(void){return this->gamma_i_j;};
@@ -122,7 +123,7 @@ private:
     /*Minimal difference between two events on process i*/
     timestamp_t delta_i = 1e-1f;
     /*Вектор со всеми событиями процесса*/
-    vector<shared_ptr<Event>> eventVect;
+    deque<shared_ptr<Event>> eventVect;
     /*последнее событие, для которого был подсчитана CLC отметка
     (см. syncTimestamps)*/
     uint32_t lastEventEstimated = 0;
@@ -130,7 +131,7 @@ private:
     bool clcComputed = false;
 
 public:
-    explicit Process(process_id id, vector<std::shared_ptr<clc::Event>> eventVect);
+    explicit Process(process_id id, deque<std::shared_ptr<clc::Event>> eventVect);
     Process(const Process& process);
     
       ~Process(){};
@@ -143,7 +144,7 @@ public:
 
     void setLastEventEstimated(uint32_t val){this->lastEventEstimated = val;};
     bool getCLCComputed(void){return this->clcComputed;};
-    vector<shared_ptr<Event>>& getEventVect(void){return this->eventVect;};
+    deque<shared_ptr<Event>>& getEventVect(void){return this->eventVect;};
 
     /*вовзращает true, если до currEvent нет события отправки, 
     нарушающего логику сообшений*/
@@ -151,10 +152,10 @@ public:
 };
 
 /* Вектор всех зарегистрированных процессов */
-static vector<shared_ptr<Process>> processVector;
+static deque<shared_ptr<Process>> processVector;
 
 /*Вектор переходов между устройствами*/
-static vector<EventCooperation_t> eventsCoopMap;
+static deque<EventCooperation_t> eventsCoopMap;
 
 class CLCSynchronizer{
 private:
@@ -180,7 +181,7 @@ private:
         event_number eventNumber,
         event_location_t eventLocation){
         std::cout<<"____\n";
-        std::cout<<"getEventType()\n";
+        std::cout<<"getEventByIDs()\n";
         std::cout<<"this = " << this << "\n";
         std::cout<<"____\n";
             return processVector.at(eventLocation)->eventVect.at(eventNumber);
