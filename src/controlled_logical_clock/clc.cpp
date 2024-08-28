@@ -305,8 +305,6 @@ void clc::addEvent(event_t evType, timestamp_t timestamp,
                 }
             }
         }
-             
-    
 };
 
 void clc::addEventConnection(process_id sendEvLocation, event_number sendEvNum, 
@@ -319,4 +317,8 @@ void clc::addEventConnection(process_id sendEvLocation, event_number sendEvNum,
         EventCooperation_t evPair{sendEv, recvEv};
 
         eventsCoopMap.push_back(evPair);
+}
+
+double clc::getResultingTimestamp(process_id evLocation, event_number evNum){
+    return static_cast<double>(processVector.at(evLocation)->getEventVect().at(evNum)->getTimestampCLC());
 }

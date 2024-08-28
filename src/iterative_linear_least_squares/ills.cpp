@@ -3,12 +3,11 @@
 using Eigen::MatrixXf;
 using Eigen::VectorXf;
 
-
+#define COLS 2
 
 float illsEstimateSkew(std::vector<float>& sender_timestamps,
                        std::vector<float>& reciever_timestamps,
-                       uint32_t& num_timestamps,
-                       uint32_t& cols){
+                       uint32_t& num_timestamps){
     
     uint32_t curr_set_size = num_timestamps - 1;
     float clock_skew_curr = 0;
@@ -20,7 +19,7 @@ float illsEstimateSkew(std::vector<float>& sender_timestamps,
     while(curr_set_size > 1){
 
         /* timestamps, leaving sender*/
-        MatrixXf A(curr_set_size - 1, cols);
+        MatrixXf A(curr_set_size - 1, COLS);
         /* timestamps, arriving at reciever*/
         MatrixXf b(curr_set_size - 1, 1);
 
@@ -64,7 +63,6 @@ float illsEstimateSkew(std::vector<float>& sender_timestamps,
 }
 
 float illsIterateClockSkew(MatrixXf& A, MatrixXf& b){
-    uint32_t cols = 2;
     uint32_t num_timestamps = 10; //rows
     MatrixXf X_result(2, 1);
 

@@ -164,11 +164,6 @@ private:
     /*Minimal message delay of messages from process k to process i,
       mu_k,i*/
     vector<vector<timestamp_t>> minMsgDelay;
-    /*Массив всех процессов*/
-    // TODO: необходима инициализация
-    //vector<Process> processVec;
-    /*Вектор переходов между устройствами*/
-    //vector<EventCooperation_t> interProcessVector;
 
     /*Ищет событие отправки в таблице переходов между процессами/устройствами*/
     shared_ptr<Event> searchForSendEvent(shared_ptr<Event> currRcvEvent);
@@ -197,7 +192,7 @@ public:
     void clcComputeForwardAmortization(shared_ptr<Event> currEvent);
     void clcComputeBackwardAmortization(shared_ptr<Event> currEvent, 
         uint32_t process_id);
-    //TODO?
+    //TODO: рассчитываем гаммы через другой алгоритм?
     //page 5, para 3.1
     void evaluateGammas(void);
 
@@ -212,7 +207,11 @@ void addEvent(event_t evType, timestamp_t timestamp,
 void addEventConnection(process_id sendEvLocation, event_number sendEvNum, 
     process_id recvEvLocation, event_number recvEvNum);
 
+double getResultingTimestamp(process_id evLocation, event_number evNum);
+
 }
+
+
 
 
 #endif //CLC_HPP

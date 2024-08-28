@@ -11,7 +11,6 @@ float illsIterateClockSkew(MatrixXf& A, MatrixXf& b);
 
 float illsEstimateSkew(std::vector<float>& sender_timestamps,
                        std::vector<float>& reciever_timestamps,
-                       uint32_t& num_timestamps,
-                       uint32_t& cols);
+                       uint32_t& num_timestamps);
 
 #endif //ILLS_H

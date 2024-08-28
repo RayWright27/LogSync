@@ -13,23 +13,20 @@
 Передавать 1 логическую отметку между процессами
 */
 void testLCWDD(void){
-  lcwdd::ProcessID id = 2;
-  lcwdd::EventIndex idx = 4;
+    uint32_t numOfProcesses = 4;
+    lcwdd::LCWDDSynchronizer Sync(numOfProcesses);
+    Sync.addDirectDependencyVectorEntry(std::vector<uint32_t>{1, 0, 0, 0});
+    Sync.addDirectDependencyVectorEntry(std::vector<uint32_t>{1, 4, 3, 1});
+    Sync.addDirectDependencyVectorEntry(std::vector<uint32_t>{0, 0, 3, 2});
+    Sync.addDirectDependencyVectorEntry(std::vector<uint32_t>{0, 0, 0, 2});
 
-  auto start = std::chrono::high_resolution_clock::now();
-  //16 событий в 1 цикле
-  for(int i = 0; i < 1; i++){
-    lcwdd::DependencyTrack(id, idx);
-    lcwdd::ClearOutputArr();
-  }
-  auto stop = std::chrono::high_resolution_clock::now();
-  auto duration = std::chrono::duration_cast<std::chrono::nanoseconds>(stop - start);
-  std::cout << "LCWDD duration = " << duration.count() << std::endl;
+    Sync.DependencyTrack(2, 4);
+    auto result = Sync.getResult();
+    Sync.ClearOutputArr();
 
-  lcwdd::ClearOutputArr();
-  id = 3;
-  idx = 1;
-  lcwdd::DependencyTrack(id, idx);
+    Sync.DependencyTrack(3, 1);
+    result = Sync.getResult();
+    Sync.ClearOutputArr();
 
 }
 
@@ -61,12 +58,17 @@ void testCLC(void){
   //clc::CLCSynchronizer Sync(eventsCoopMap, processVecMain);
   auto Sync = std::make_unique<clc::CLCSynchronizer>();
   Sync->syncTimestamps();
+
+  /* проверим результат */
+  for(uint32_t idx = 0; idx < 5; idx++){
+      std::cout << "clc::getResultingTimestamp(1, "<< idx <<") = " <<
+      clc::getResultingTimestamp(1, idx) <<"\n";
+  }
 }
 //---------------------------------------------------
 
 void testILLS(void){
     /* initialising test values*/
-    uint32_t cols = 2;
     uint32_t num_timestamps = 100; //rows
 
 
@@ -87,13 +89,9 @@ void testILLS(void){
     }
 
     float result = 0;
-    
-    
+
     result = 
-    illsEstimateSkew(sender_timestamps, reciever_timestamps, num_timestamps,
-                     cols);
-    
-    
+    illsEstimateSkew(sender_timestamps, reciever_timestamps, num_timestamps);
 
     std::cout << "resulting skew = " << result <<"\n";
 };
