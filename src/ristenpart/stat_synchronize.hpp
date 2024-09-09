@@ -8,24 +8,42 @@
 #include <vector>
 #include <cstdint>
 #include <memory>
+#include <set>
 
 using namespace std;
 
-typedef struct LogFileEntry{
+// TODO: ОТКУДА БЕРЁТСЯ ИНФОРМАЦИЯ О СВЯЗИ ХОСТОВ??
+namespace rist{
+typedef struct Event{
     uint32_t entryNumber;
-    uint32_t depatureEventTimestamp;
-    uint32_t arrivalEventTimestamp;
     /* host/process */
     uint32_t hostNumber;
-}LogFileEntry_t;
+    uint32_t depatureEventTimestamp; //p
+    uint32_t arrivalEventTimestamp; //a
+}Event_t;
 
-typedef struct Host{
-    vector<shared_ptr<LogFileEntry>> LogFile;
+class StatSync {
+private:
+    vector<shared_ptr<Event_t>> LogFile;
     /* number of entries in the log */
-    uint32_t n_hg;
-    uint32_t D_hg; //??
-    uint32_t V_hg; //??
-}Host_t;
+    uint32_t n_hg = 0;
+    uint32_t D_hg = 0;
+    // V_hg - множество!
+    std::set<uint32_t> V_hg;
+    uint32_t A_hg = 0;
+
+    uint32_t pickRefHost(vector<shared_ptr<Event_t>> &LogFile,
+                         Event_t event /*A*/, uint32_t V_hg, uint32_t n_hg);
+
+public:
+    StatSync(){};
+    void addEventToLogFile(Event_t event);
+
+    uint32_t synchronize(void);
+};
+
+}
+
 
 
 

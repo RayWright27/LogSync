@@ -18,4 +18,4 @@ add_executable( main
         src/math/misc.cpp
 
         src/main.cpp
-        src/ristenpart/stat_synchronize.hpp)
+        src/ristenpart/stat_synchronize.hpp src/ristenpart/stat_synchronize.cpp)

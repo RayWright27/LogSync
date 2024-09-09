@@ -6,6 +6,7 @@
 #include "logical_clock_with_direct_dependency\lcwdd.hpp"
 #include "controlled_logical_clock\clc.hpp"
 #include "iterative_linear_least_squares\ills.hpp"
+#include "ristenpart\stat_synchronize.hpp"
 
 //---------------------------------------------------
 /*
@@ -97,6 +98,15 @@ void testILLS(void){
 };
 
 //---------------------------------------------------
+void testRistenpart(void){
+    rist::StatSync Sync;
+    Sync.addEventToLogFile(rist::Event_t{0, 0,
+                                         0, 0});
+    Sync.addEventToLogFile(rist::Event_t{1, 0,
+                                         1, 5});
+    Sync.synchronize();
+}
+//---------------------------------------------------
 
 int main(){
 
@@ -118,6 +128,8 @@ int main(){
   //for(int i = 0; i < 10000; i++){
   
   testCLC();
+
+  testRistenpart();
   
   /*PROCESS_MEMORY_COUNTERS_EX pmc;
   GetProcessMemoryInfo(GetCurrentProcess(), (PROCESS_MEMORY_COUNTERS*)&pmc, sizeof(pmc));
